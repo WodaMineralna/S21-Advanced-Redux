@@ -1,0 +1,45 @@
+import { createSlice } from "@reduxjs/toolkit";
+
+const initialState = {
+  cart: [],
+  showCart: true, // DEBUGGING, it should be 'false' at init
+};
+
+function findIndex(arr, key, value) {
+  return arr.findIndex((item) => item[key] === value);
+}
+
+const cartSlice = createSlice({
+  name: "cart",
+  initialState,
+  reducers: {
+    addToCart(state, action) {
+      const indexOfDuplicate = findIndex(state.cart, "id", action.payload.id);
+      if (indexOfDuplicate !== -1) state.cart[indexOfDuplicate].quantity++;
+      else state.cart.push({ ...action.payload, quantity: 1 });
+    },
+    incrementQuantity(state, action) {
+      state.cart.find((item) => item.id === action.payload).quantity++;
+    },
+    decrementQuantity(state, action) {
+      const indexOfItem = findIndex(state.cart, "id", action.payload);
+      if (state.cart[indexOfItem].quantity === 1)
+        // remove the item when it has a quantity of 1
+        state.cart.splice(indexOfItem, 1);
+      else state.cart[indexOfItem].quantity--;
+    },
+    toggleCart(state) {
+      // DEBUGGING
+      // state.cart.map((item) =>
+      //   console.log(
+      //     `${item.id} + ${item.title} + ${item.price} + ${item.quantity}`
+      //   )
+      // );
+      state.showCart = !state.showCart;
+    },
+  },
+});
+
+export const cartActions = cartSlice.actions;
+
+export default cartSlice.reducer;
