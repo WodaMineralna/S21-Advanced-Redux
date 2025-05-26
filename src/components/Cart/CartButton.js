@@ -3,17 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import classes from "./CartButton.module.css";
 import { cartActions } from "../../store/cart-slice";
 
-function reduceTotalAmount(arr) {
-  return arr.reduce(
-    (amount, currentValue) => amount + currentValue.quantity,
-    0
-  );
-}
-
 const CartButton = (props) => {
   const dispatch = useDispatch();
-  const cartItemsAmount = useSelector((state) => reduceTotalAmount(state.cart.cart)
-  );
+  const cartItemsAmount = useSelector((state) => state.cart.totalQuantity);
 
   const showCartHandler = () => {
     dispatch(cartActions.toggleCart());
