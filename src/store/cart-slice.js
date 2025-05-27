@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   cart: [],
   totalQuantity: 0,
-  showCart: true, // DEBUGGING, it should be 'false' at init
+  showCart: true, // DEBUGGING, it should be 'false' at init  
 };
 
 function findIndex(arr, key, value) {
