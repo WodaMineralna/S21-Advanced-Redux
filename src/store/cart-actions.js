@@ -3,7 +3,9 @@ import { uiActions } from "./ui-slice";
 
 // if firebase somehow loses 'totalQuantitty'
 function reduceTotalQuantity(arr) {
-  return arr.reduce((acc, currentValue) => acc + currentValue.quantity, 0);
+  return (
+    arr?.reduce((acc, currentValue) => acc + currentValue.quantity, 0) || 0
+  );
 }
 
 export function fetchCartData() {
