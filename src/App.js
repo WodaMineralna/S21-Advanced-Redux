@@ -5,8 +5,7 @@ import Notification from "./components/UI/Notification";
 import Layout from "./components/Layout/Layout";
 import Cart from "./components/Cart/Cart";
 import Products from "./components/Shop/Products";
-
-import { uiActions } from "./store/ui-slice";
+import { sendCartData } from "./store/cart-slice";
 
 let isInitial = true;
 
@@ -21,45 +20,7 @@ function App() {
       return;
     }
 
-    const sendCartdata = async () => {
-      dispatch(
-        uiActions.showNotification({
-          status: "pending",
-          title: "Sending...",
-          message: "Sending cart data...",
-        })
-      );
-
-      const response = await fetch(
-        "https://s21-advanced-redux-default-rtdb.firebaseio.com/cart.json",
-        {
-          method: "PUT",
-          body: JSON.stringify(cart),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Sending cart data failed");
-      }
-
-      dispatch(
-        uiActions.showNotification({
-          status: "success",
-          title: "Success!",
-          message: "Successfully sent cart data!",
-        })
-      );
-    };
-
-    sendCartdata().catch((error) => {
-      dispatch(
-        uiActions.showNotification({
-          status: "error",
-          title: "Error!",
-          message: `An error has occured: ${error}.`,
-        })
-      );
-    });
+    dispatch(sendCartData(cart))
   }, [cart, dispatch]);
 
   return (

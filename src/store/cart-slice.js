@@ -1,9 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+import { uiActions } from "./ui-slice";
+
 const initialState = {
   cart: [],
   totalQuantity: 0,
-  showCart: true, // DEBUGGING, it should be 'false' at init  
 };
 
 function findIndex(arr, key, value) {
@@ -32,17 +33,53 @@ const cartSlice = createSlice({
         state.cart.splice(indexOfItem, 1);
       else state.cart[indexOfItem].quantity--;
     },
-    toggleCart(state) {
-      // DEBUGGING
-      // state.cart.map((item) =>
-      //   console.log(
-      //     `${item.id} + ${item.title} + ${item.price} + ${item.quantity}`
-      //   )
-      // );
-      state.showCart = !state.showCart;
-    },
   },
 });
+
+export function sendCartData(cart) {
+  return async (dispatch) => {
+    dispatch(
+      uiActions.showNotification({
+        status: "pending",
+        title: "Sending...",
+        message: "Sending cart data...",
+      })
+    );
+
+    const sendRequest = async () => {
+      const response = await fetch(
+        "https://s21-advanced-redux-default-rtdb.firebaseio.com/cart.json",
+        {
+          method: "PUT",
+          body: JSON.stringify(cart),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Sending cart data failed");
+      }
+    };
+
+    try {
+      await sendRequest();
+      dispatch(
+        uiActions.showNotification({
+          status: "success",
+          title: "Success!",
+          message: "Successfully sent cart data!",
+        })
+      );
+    } catch (error) {
+      dispatch(
+        uiActions.showNotification({
+          status: "error",
+          title: "Error!",
+          message: `An error has occured: ${error}.`,
+        })
+      );
+    }
+  };
+}
 
 export const cartActions = cartSlice.actions;
 
