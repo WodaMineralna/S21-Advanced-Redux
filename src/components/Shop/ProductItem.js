@@ -6,8 +6,7 @@ import classes from "./ProductItem.module.css";
 import { cartActions } from "../../store/cart-slice";
 
 const ProductItem = (props) => {
-  const { title, price, description } = props;
-  const UID = Math.random().toString(36).substr(2, 9);
+  const { id, title, price, description } = props;
   
   const dispatch = useDispatch();
 
@@ -24,7 +23,7 @@ const ProductItem = (props) => {
         </header>
         <p>{description}</p>
         <div className={classes.actions}>
-          <button onClick={() => addToCartHandler(UID, title, price)}>
+          <button onClick={() => addToCartHandler(id, title, price)}>
             Add to Cart
           </button>
         </div>
