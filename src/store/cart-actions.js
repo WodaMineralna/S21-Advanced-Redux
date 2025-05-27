@@ -66,7 +66,10 @@ export function sendCartData(cart) {
         "https://s21-advanced-redux-default-rtdb.firebaseio.com/cart.json",
         {
           method: "PUT",
-          body: JSON.stringify(cart),
+          body: JSON.stringify({
+            cart: cart.cart,
+            totalQuantity: cart.totalQuantity,
+          }),
         }
       );
 
